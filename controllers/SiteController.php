@@ -11,9 +11,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use app\models\Article;
-use app\models\Category;
-use app\models\ArticleCategory;
+use app\models\Register;
+use app\models\Community;
 
 class SiteController extends Controller
 {
@@ -60,15 +59,15 @@ class SiteController extends Controller
     }
 
 	public function actionList(){
-		$query	= Article::find()->where(['like', 'originurl', '.html']);
+		$query	= Register::find();
 		$count	= $query->count();
 		$pagination = new Pagination(['totalCount' => $count]);
 		$pagination->pageSize = 10;
-		$articles	= $query->offset($pagination->offset)
+		$registers	= $query->offset($pagination->offset)
 					->limit($pagination->limit)
 					->all();
 		return $this->render('list', [
-					'articles'		=> $articles,
+					'registers'		=> $registers,
 					'pagination'	=> $pagination,
 					]);
 	}
@@ -90,45 +89,29 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-    	echo '<meta charset="utf-8">';
-    	ob_start();
-    	echo str_repeat("&nbsp;", 1024) . "<br />";
-    	ob_flush();
-    	$article	= Article::find()->where("urlgot=0 and originurl like '%.html'")->one();
-    	while($article){
-    		//echo $article->originurl . "<br />";ob_flush();
-    		$parts	= $this->getParts($article->originurl);
-    		$this->saveCategory($parts, $article->id);
-    		$article->urlgot	= 1;
-    		$article->save();
-    		$article	= Article::find()->where("urlgot=0 and originurl like '%.html'")->one();
-    		ob_flush();
-    		flush();
-    	}
+
     }
 
-	private function saveCategory($newCate, $id){
-		foreach($newCate as $cate){
-			$category = Category::find()->where(['name' => $cate])->one();
-			if($category){
-				$ac = new ArticleCategory();
-				$ac->articleid = $id;
-				$ac->categoryid= $category->id;
-				$ac->save();
+	public function actionAdd(){
+		$register	= new Register();
+		$post		= Yii::$app->request->post();
+		if($register->load($post)){
+			$register->userid		= 1;
+			$register->communityid	= 1;
+			$register->address		= '10-2-1102';
+			$register->updatetime = date("Y-m-d H:i:s");
+			//VarDumper::Dump($register);
+			if($register->save()){
+				Yii::$app->session->setFlash('message', '信息登记成功');
+				return $this->render('add', ['register' => $register]);
 			}
 			else{
-				$category = new Category();
-				$category->name = $cate;
-				echo $cate . '<br />';
-				$category->save();
+				VarDumper::Dump($register->errors);
 			}
 		}
-	}
-
-	private function getParts($url){
-		$parts = explode('/', substr($url, 26));
-		unset($parts[count($parts)-1]);
-		return $parts;
+		else{
+			return $this->render('add', ['register' => $register]);
+		}
 	}
 
     /**

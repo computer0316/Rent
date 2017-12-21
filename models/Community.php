@@ -5,19 +5,19 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "category".
+ * This is the model class for table "community".
  *
  * @property integer $id
  * @property string $name
  */
-class Category extends \yii\db\ActiveRecord
+class Community extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'category';
+        return 'community';
     }
 
     /**
@@ -27,7 +27,7 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['name'], 'string', 'max' => 32],
+            [['name'], 'string', 'max' => 16],
         ];
     }
 

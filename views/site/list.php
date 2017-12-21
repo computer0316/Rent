@@ -12,9 +12,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
 <?
-	foreach($articles as $article){
-		echo $article->updatetime . '&nbsp;';
-		echo '<font size="+1"><a href="index.php?r=site/show&id=' . $article->id . '">' . $article->title . '</a></font><br />';
+	foreach($registers as $register){
+		echo $register->updatetime . '&nbsp;';
+		echo '<font size="+1"><a href="index.php?r=site/show&id=' . $register->id . '">' . $register->target_communityid . '</a></font><br />';
 
 		//echo $article->content . '<br />';
 
