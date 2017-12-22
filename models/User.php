@@ -11,6 +11,7 @@ use Yii;
  * @property string $name
  * @property string $mobile
  * @property string $password
+ * @property string $password1
  * @property string $firsttime
  * @property string $updatetime
  * @property string $ip
@@ -28,18 +29,24 @@ class User extends \yii\db\ActiveRecord
         return 'user';
     }
 
+	public $password1;
+	public $verifyCode;
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['name', 'mobile', 'password', 'firsttime', 'updatetime', 'ip', 'communityid', 'identification', 'address'], 'required'],
+            [['name', 'mobile', 'password', 'password1', 'firsttime', 'updatetime', 'communityid', 'identification', 'address'], 'required'],
             [['firsttime', 'updatetime'], 'safe'],
+            [['mobile'], 'string', 'min' => 11, 'max' => 11, 'message' => '请输入11位的手机号'],
             [['communityid'], 'integer'],
-            [['name', 'mobile', 'address'], 'string', 'max' => 16],
-            [['password'], 'string', 'max' => 64],
+            [['name', 'address'], 'string', 'max' => 16],
+            [['password', 'password1'], 'string', 'max' => 64],
             [['ip', 'identification'], 'string', 'max' => 32],
+            ['password1', 'compare', 'compareAttribute' => 'password','message'=>'两次输入的密码不一致！'],
+            ['verifyCode', 'captcha'],
         ];
     }
 
@@ -50,15 +57,17 @@ class User extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'mobile' => 'Mobile',
-            'password' => 'Password',
+            'name' => '姓名',
+            'mobile' => '手机号',
+            'password' => '密码',
+            'password1' => '确认密码',
             'firsttime' => 'Firsttime',
             'updatetime' => 'Updatetime',
             'ip' => 'Ip',
-            'communityid' => 'Communityid',
-            'identification' => 'Identification',
+            'communityid' => '小区名称',
+            'identification' => '身份证号',
             'address' => 'Address',
+            'verifyCode' => '输入验证码',
         ];
     }
 }

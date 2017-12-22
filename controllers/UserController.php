@@ -20,6 +20,67 @@ class UserController extends Controller
 {
 	public $enableCsrfValidation = false;
 
+	    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['logout'],
+                'rules' => [
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+                'height' => 50,
+                'width' => 80,
+                'minLength' => 2,
+                'maxLength' => 2,
+            ],
+        ];
+    }
+
+
+	// 用户注册
+	public function actionRegister(){
+		$this->layout = 'login';
+		$user = new User();
+		$post = Yii::$app->request->post();
+		if($user->load($post)){
+			VarDumper::Dump($user);
+		}
+		else{
+			return $this->render('register', ['user' => $user]);
+		}
+	}
+
+	// 用户登录
 	public function actionLogin(){
 		$this->layout = false;
 		$user = new User();
