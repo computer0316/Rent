@@ -13,6 +13,8 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Register;
 use app\models\Community;
+use app\models\IO;
+use app\models\User;
 
 class SiteController extends Controller
 {
@@ -56,6 +58,33 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
+    }
+
+    public function actionTemp(){
+    	echo '<meta charset="utf-8">';
+    	$strs = IO::getStringsFromFile("f:\identification.txt");
+    	$i = 0;
+    	foreach($strs as $str){
+    		$person		= explode("\t", $str);
+    		if(!$person[0]){
+    			break;
+    		}
+    		$user		= new User();
+    		$user->name				= $person[0];
+    		$user->mobile 			= "139031600" . str_pad($i++, 2, "0", STR_PAD_LEFT);
+    		$user->identification	= $person[1];
+    		$user->updatetime		= date("Y-m-d H:i:s");
+    		$user->firsttime		= date("Y-m-d H:i:s");
+    		$user->password			= "2226ce94cf0f3231556d320a9260f037";
+    		$user->ip				= "192.168.1.6";
+    		$user->communityid		= rand(1,5);
+    		$user->address			= rand(1,10) . '-' . rand(1,3) . '-' . rand(1,24) . str_pad(rand(1,3), 2, "0", STR_PAD_LEFT);
+    		if(!$user->save()){
+    			VarDumper::Dump($user->errors);
+    			die();
+    		}
+    		echo $user->name . '<br />';
+    	}
     }
 
 	public function actionList(){
