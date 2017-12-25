@@ -118,7 +118,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-
+		echo 'index.php';
     }
 
 	public function actionAdd(){

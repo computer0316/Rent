@@ -10,21 +10,21 @@
 ?>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="css/userlogin.css" />
-
+<br /><br /><br /><br />
 	<div class="form1">
 		<div class="form">
 			<div> <h1></h1></div>
 
 <?php
-
 	$form = ActiveForm::begin(['id' => 'clientform']);
 ?>
-<br /><br /><br /><br />
-	<?= $form->field($user, 'mobile')->textInput(['class' => 'menu2']) ?>
+	<?= $form->field($user, 'mobile')->textInput() ?>
 
-	<?= $form->field($user, 'password')->passwordInput(['class' => 'menu2']) ?>
+	<?= $form->field($user, 'identification')->textInput() ?>
 
-	<?= $form->field($user, 'password1')->passwordInput(['class' => 'menu2']) ?>
+	<?= $form->field($user, 'password')->passwordInput() ?>
+
+	<?= $form->field($user, 'password1')->passwordInput() ?>
 
 	<?= $form->field($user, 'verifyCode')->widget(Captcha::className()) ?>
 

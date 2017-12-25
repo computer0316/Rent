@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\base\ErrorException;
 
 /**
  * This is the model class for table "user".
@@ -31,6 +32,37 @@ class User extends \yii\db\ActiveRecord
 
 	public $password1;
 	public $verifyCode;
+
+	// 新用户注册
+	public function register(){
+		if(!$this->validateIdentification()){
+			throw new ErrorException("数据库中不存在这个身份证号码");
+		}
+	}
+
+	// 验证身份证是否存在
+	// 如果存在返回 true
+	private function validateIdentification(){
+		return User::find()->where(['identification' => $this->identification])->one();
+	}
+
+	public static function findByMobile($mobile){
+		$user = self::find()->where(['mobile' => $mobile])->one();
+		return $user;
+	}
+
+
+	/**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return $this->password === md5($password);
+    }
+
 
     /**
      * @inheritdoc

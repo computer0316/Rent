@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 use app\models\Tools;
 use app\models\LoginForm;
 use app\models\User;
-use yii\base\Exception;
+use yii\base\ErrorException;
 
 
 
@@ -72,12 +72,20 @@ class UserController extends Controller
 		$this->layout = 'login';
 		$user = new User();
 		$post = Yii::$app->request->post();
-		if($user->load($post)){
-			VarDumper::Dump($user);
+		try{
+			if($user->load($post)){
+				if($user->register()){
+					Yii::$app->session->setFlash('message', "注册成功。");
+				}
+				else{
+					Yii::$app->session->setFlash('message', "注册失败，请与管理员联系。");
+				}
+			}
 		}
-		else{
-			return $this->render('register', ['user' => $user]);
+		catch(ErrorException $ex){
+			echo $ex->getName();
 		}
+		return $this->render('register', ['user' => $user]);
 	}
 
 	// 用户登录
