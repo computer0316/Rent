@@ -31,19 +31,12 @@ class User extends \yii\db\ActiveRecord
     }
 
 	public $password1;
-	public $verifyCode;
 
 	// 新用户注册
 	public function register(){
-		if(!$this->validateIdentification()){
-			throw new ErrorException("数据库中不存在这个身份证号码");
-		}
-	}
-
-	// 验证身份证是否存在
-	// 如果存在返回 true
-	private function validateIdentification(){
-		return User::find()->where(['identification' => $this->identification])->one();
+		$this->updatetime	= date("Y-m-d H:i:s");
+		$this->ip			= Yii::$app->request->getUserIP();
+		return $this->save();
 	}
 
 	public static function findByMobile($mobile){
@@ -70,15 +63,13 @@ class User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'mobile', 'password', 'password1', 'firsttime', 'updatetime', 'communityid', 'identification', 'address'], 'required'],
+            [['name', 'mobile', 'password', 'firsttime', 'updatetime', 'communityid', 'identification', 'address'], 'required'],
             [['firsttime', 'updatetime'], 'safe'],
             [['mobile'], 'string', 'min' => 11, 'max' => 11, 'message' => '请输入11位的手机号'],
             [['communityid'], 'integer'],
             [['name', 'address'], 'string', 'max' => 16],
             [['password', 'password1'], 'string', 'max' => 64],
             [['ip', 'identification'], 'string', 'max' => 32],
-            ['password1', 'compare', 'compareAttribute' => 'password','message'=>'两次输入的密码不一致！'],
-            ['verifyCode', 'captcha'],
         ];
     }
 
@@ -99,7 +90,6 @@ class User extends \yii\db\ActiveRecord
             'communityid' => '小区名称',
             'identification' => '身份证号',
             'address' => 'Address',
-            'verifyCode' => '输入验证码',
         ];
     }
 }

@@ -11,6 +11,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\Tools;
 use app\models\LoginForm;
+use app\models\RegisterForm;
 use app\models\User;
 use yii\base\ErrorException;
 
@@ -18,8 +19,19 @@ use yii\base\ErrorException;
 
 class UserController extends Controller
 {
-	public $enableCsrfValidation = false;
+	public $enableCsrfValidation = true;
 
+	public function beforeAction($action)
+	{
+		if (parent::beforeAction($action)) {
+			if ($this->enableCsrfValidation) {
+				Yii::$app->getRequest()->getCsrfToken(true);
+			}
+			return true;
+		}
+
+		return false;
+	}
 	    /**
      * @inheritdoc
      */
@@ -58,10 +70,10 @@ class UserController extends Controller
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-                'height' => 50,
+                'height' => 40,
                 'width' => 80,
-                'minLength' => 2,
-                'maxLength' => 2,
+                'minLength' => 4,
+                'maxLength' => 4
             ],
         ];
     }
@@ -70,22 +82,30 @@ class UserController extends Controller
 	// 用户注册
 	public function actionRegister(){
 		$this->layout = 'login';
-		$user = new User();
+		$registerForm = new RegisterForm();
 		$post = Yii::$app->request->post();
-		try{
-			if($user->load($post)){
-				if($user->register()){
-					Yii::$app->session->setFlash('message', "注册成功。");
+			if($registerForm->load($post)){
+				$user = User::find()->where(['identification' => $registerForm->identification])->one();
+				if($user){
+					$user->mobile		= $registerForm->mobile;
+					$user->password		= md5($registerForm->password);
+					if($user->register()){
+						Yii::$app->session->setFlash('message', "注册成功。");
+					}
+					else{
+						$errors = $user->getFirstErrors();
+						foreach($errors as $error){
+							Yii::$app->session->setFlash('message', $error);
+							break;
+						}
+					}
 				}
 				else{
-					Yii::$app->session->setFlash('message', "注册失败，请与管理员联系。");
+					Yii::$app->session->setFlash('message', '数据库中不存在此身份证！');
 				}
+				$registerForm = new RegisterForm();
 			}
-		}
-		catch(ErrorException $ex){
-			echo $ex->getName();
-		}
-		return $this->render('register', ['user' => $user]);
+			return $this->render('register', ['registerForm' => $registerForm]);
 	}
 
 	// 用户登录

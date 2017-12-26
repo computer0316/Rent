@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="stylesheet" type="text/css" href="css/login.css" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="csrf-param" content="_csrf">
+		<meta name="csrf-token" content="CjSv8cYo2De35-G6-mqrllO0vAefCMSu39GhvIZq3JhDdsWovxDqYvO2k_m2HNn5I9D6SKs_jeWahpHbwB6_-w==">
+		<title></title>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="container">
+				<div class="form1" style="clear:both;margin-top:100px;">
+					<div class="form">
+						<div>
+							<h1>房屋交换</h1></div>
+						<form id="clientform" action="/Rent/web/?r=user/register" method="post">
+							<input type="hidden" name="_csrf" value="CjSv8cYo2De35-G6-mqrllO0vAefCMSu39GhvIZq3JhDdsWovxDqYvO2k_m2HNn5I9D6SKs_jeWahpHbwB6_-w==">
+							<div class="form-group field-registerform-mobile required">
+								<label class="control-label" for="registerform-mobile">手机号</label>
+								<input type="text" id="registerform-mobile" class="form-control" name="RegisterForm[mobile]" aria-required="true">
+								<div class="help-block"></div>
+							</div>
+							<div class="form-group field-registerform-identification required">
+								<label class="control-label" for="registerform-identification">身份证号</label>
+								<input type="text" id="registerform-identification" class="form-control" name="RegisterForm[identification]" aria-required="true">
+								<div class="help-block"></div>
+							</div>
+							<div class="form-group field-registerform-password required">
+								<label class="control-label" for="registerform-password">密码</label>
+								<input type="password" id="registerform-password" class="form-control" name="RegisterForm[password]" aria-required="true">
+								<div class="help-block"></div>
+							</div>
+							<div class="form-group field-registerform-password1 required">
+								<label class="control-label" for="registerform-password1">确认密码</label>
+								<input type="password" id="registerform-password1" class="form-control" name="RegisterForm[password1]" aria-required="true">
+								<div class="help-block"></div>
+							</div>
+							<div class="form-group field-registerform-verifycode required">
+								<label class="control-label" for="registerform-verifycode">验证码</label>
+								<img id="registerform-verifycode-image" src="/Rent/web/index.php?r=site%2Fcaptcha&amp;v=5a41f6727a090" alt="">
+								<input type="text" id="registerform-verifycode" class="form-control" name="RegisterForm[verifyCode]">
+								<div class="help-block"></div>
+							</div>
+							<div class="form-group button-group">
+								<button type="submit" class="submit">提交</button>
+								<button type="reset" class="submit">重置</button></div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer class="footer">
+			<div class="container">
+				<p class="pull-left">&copy; My Company 2017</p>
+				<p class="pull-right">技术支持
+					<a href="http://www.yiiframework.com/" rel="external">Yii 框架</a></p>
+			</div>
+		</footer>

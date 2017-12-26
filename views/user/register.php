@@ -8,25 +8,21 @@
 	// 客户信息窗体
 
 ?>
-	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="css/userlogin.css" />
-<br /><br /><br /><br />
+
 	<div class="form1">
 		<div class="form">
-			<div> <h1></h1></div>
-
 <?php
 	$form = ActiveForm::begin(['id' => 'clientform']);
 ?>
-	<?= $form->field($user, 'mobile')->textInput() ?>
+	<?= $form->field($registerForm, 'mobile')->textInput() ?>
 
-	<?= $form->field($user, 'identification')->textInput() ?>
+	<?= $form->field($registerForm, 'identification')->textInput() ?>
 
-	<?= $form->field($user, 'password')->passwordInput() ?>
+	<?= $form->field($registerForm, 'password')->passwordInput() ?>
 
-	<?= $form->field($user, 'password1')->passwordInput() ?>
+	<?= $form->field($registerForm, 'password1')->passwordInput() ?>
 
-	<?= $form->field($user, 'verifyCode')->widget(Captcha::className()) ?>
+	<?= $form->field($registerForm, 'verifyCode')->widget(Captcha::className(), ['imageOptions' => ['class' => "captcha"]]) ?>
 
 <div class="form-group button-group">
 
@@ -38,9 +34,6 @@
 
 <?php
 	ActiveForm::end();
-if(Yii::$app->session->hasFlash('message')){
-echo "<script>alert('" . Yii::$app->session->getFlash('message') . "')</script>";
-}
 ?>
 
 </div></div>
