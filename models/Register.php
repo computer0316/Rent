@@ -30,10 +30,9 @@ class Register extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['userid', 'communityid', 'address', 'target_communityid', 'updatetime'], 'required'],
-            [['userid', 'communityid', 'target_communityid'], 'integer'],
+            [['userid', 'target_communityid', 'updatetime'], 'required'],
+            [['userid', 'target_communityid'], 'integer'],
             [['updatetime'], 'safe'],
-            [['address'], 'string', 'max' => 16],
         ];
     }
 
@@ -45,8 +44,6 @@ class Register extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'userid' => '用户名',
-            'communityid' => '所属小区',
-            'address' => '具体楼号',
             'target_communityid' => '目标小区',
             'updatetime' => 'Updatetime',
         ];

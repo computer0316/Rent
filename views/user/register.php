@@ -11,29 +11,30 @@
 
 	<div class="form1">
 		<div class="form">
-<?php
-	$form = ActiveForm::begin(['id' => 'clientform']);
-?>
-	<?= $form->field($registerForm, 'mobile')->textInput() ?>
+			<span id="logintitle">房屋交换系统用户注册</span>
 
-	<?= $form->field($registerForm, 'identification')->textInput() ?>
+			<?php
+				$form = ActiveForm::begin(['id' => 'clientform']);
+			?>
+				<?= $form->field($registerForm, 'mobile')->textInput(['autofocus' => true]) ?>
 
-	<?= $form->field($registerForm, 'password')->passwordInput() ?>
+				<?= $form->field($registerForm, 'identification')->textInput() ?>
 
-	<?= $form->field($registerForm, 'password1')->passwordInput() ?>
+				<?= $form->field($registerForm, 'password')->passwordInput() ?>
 
-	<?= $form->field($registerForm, 'verifyCode')->widget(Captcha::className(), ['imageOptions' => ['class' => "captcha"]]) ?>
+				<?= $form->field($registerForm, 'password1')->passwordInput() ?>
 
-<div class="form-group button-group">
+				<?= $form->field($registerForm, 'verifyCode')->widget(Captcha::className(), ['imageOptions' => ['class' => "captcha"]]) ?>
 
-	<?= Html::submitButton('提交', ['class' => 'submit']) ?>
+				<div class="form-group button-group">
 
-	<?= Html::resetButton('重置', ['class' => 'submit']) ?>
+					<?= Html::submitButton('注&nbsp;册', ['class' => 'submit']) ?>
+					<span>已经注册？点<a href="?r=user/login">这里</a>登录</span>
 
-</div>
+				</div>
 
-<?php
-	ActiveForm::end();
-?>
-
-</div></div>
+				<?php
+					ActiveForm::end();
+				?>
+		</div>
+	</div>

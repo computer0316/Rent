@@ -15,6 +15,7 @@ use app\models\Register;
 use app\models\Community;
 use app\models\IO;
 use app\models\User;
+use yii\helpers\Url;
 
 class SiteController extends Controller
 {
@@ -86,6 +87,16 @@ class SiteController extends Controller
     		echo $user->name . '<br />';
     	}
     }
+    public function actionAddlist(){
+    	for($i=0;$i<50;$i++){
+    		$register = new Register();
+    		$register->userid 		= rand(92,121);
+			$register->target_communityid = rand(1,5);
+			$register->updatetime = date("Y-m-d H:i:s");
+			$register->save();
+			echo $register->target_communityid . '<br />';
+    	}
+    }
 
 	public function actionList(){
 		$query	= Register::find();
@@ -118,7 +129,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-		echo 'index.php';
+		return $this->redirect(Url::toRoute('site/list'));
     }
 
 	public function actionAdd(){

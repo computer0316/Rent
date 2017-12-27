@@ -3,34 +3,32 @@
 	use yii\widgets\ActiveForm;
 	use yii\helpers\Url;
 	use yii\widgets\LinkPager;
+	use yii\captcha\Captcha;
 	// 客户信息窗体
 
 ?>
-	<link rel="stylesheet" type="text/css" href="css/userlogin.css" />
 
 	<div class="form1">
 		<div class="form">
-			<div> <h1>港升客户管理系统</h1></div>
+			<span id="logintitle">房屋交换系统用户登录</span>
 <?php
 
 	$form = ActiveForm::begin(['id' => 'clientform']);
 ?>
 
-	<?= $form->field($user, 'mobile')->textInput(['class' => 'menu1']) ?>
+	<?= $form->field($loginForm, 'mobile')->textInput(['autofocus' => true, 'class' => 'menu1']) ?>
 
-	<?= $form->field($user, 'password')->passwordInput(['class' => 'menu2']) ?>
+	<?= $form->field($loginForm, 'password')->passwordInput(['class' => 'menu2']) ?>
+
+	<?= $form->field($loginForm, 'verifyCode')->widget(Captcha::className(), ['imageOptions' => ['class' => "captcha"]]) ?>
 
 <div class="form-group button-group">
 
 	<?= Html::submitButton('提交', ['class' => 'submit']) ?>
-
-	<?= Html::resetButton('重置', ['class' => 'submit']) ?>
-
+	<span>还没有注册？点<a href="?r=user/register">这里</a>注册</span>
 </div>
-	</div></div>
+
 <?php
 	ActiveForm::end();
-if(Yii::$app->session->hasFlash('message')){
-echo "<script>alert('" . Yii::$app->session->getFlash('message') . "')</script>";
-}
-
+?>
+</div></div>

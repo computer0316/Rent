@@ -26,7 +26,6 @@ use app\assets\AppAsset;
 </head>
 <body>
 <?php $this->beginBody() ?>
-
 <div class="wrap">
     <div class="container">
         <?= Alert::widget() ?>
@@ -35,9 +34,7 @@ use app\assets\AppAsset;
 </div>
 
 <footer class="footer">
-    <div class="container">
         <p class="pull-left">廊坊市住房保障和房产管理局 2017</p>
-    </div>
 </footer>
 
 <?php $this->endBody() ?>

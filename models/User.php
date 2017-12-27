@@ -39,8 +39,14 @@ class User extends \yii\db\ActiveRecord
 		return $this->save();
 	}
 
-	public static function findByMobile($mobile){
-		$user = self::find()->where(['mobile' => $mobile])->one();
+	public static function login($loginForm){
+		$user = self::find()->where([
+			'mobile'	=> $loginForm->mobile,
+			'password'	=> md5($loginForm->password)
+			])->one();
+		if($user){
+			Yii::$app->session->set('userid', $user->id);
+		}
 		return $user;
 	}
 

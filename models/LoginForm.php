@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 
+
 /**
  * LoginForm is the model behind the login form.
  *
@@ -15,6 +16,7 @@ class LoginForm extends Model
 {
     public $mobile;
     public $password;
+    public $verifyCode;
     public $rememberMe = true;
 
     private $_user = false;
@@ -27,11 +29,25 @@ class LoginForm extends Model
     {
         return [
             // username and password are both required
-            [['mobile', 'password'], 'required'],
+            [['mobile', 'password', 'verifyCode'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            ['verifyCode', 'captcha', 'message'=>'验证码输入错误'],
+        ];
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'mobile'		=> '手机号',
+            'password'		=> '密码',
+            'verifyCode'	=> '验证码',
         ];
     }
 

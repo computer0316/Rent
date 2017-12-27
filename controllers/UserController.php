@@ -78,6 +78,23 @@ class UserController extends Controller
         ];
     }
 
+	public function actionDoubleColorBall(){
+		$this->layout = false;
+		$temp = rand(1,33);
+		$reds[] = rand(1,33);
+		for($i=0;$i<5;$i++){
+			while(in_array($temp, $reds)){
+				$temp = rand(1,33);
+			}
+			$reds[] = $temp;
+		}
+		sort($reds);
+		$blue = rand(1,16);
+		return $this->render('ball', [
+			'reds' => $reds,
+			'blue' => $blue,
+		]);
+	}
 
 	// 用户注册
 	public function actionRegister(){
@@ -103,25 +120,27 @@ class UserController extends Controller
 				else{
 					Yii::$app->session->setFlash('message', '数据库中不存在此身份证！');
 				}
-				$registerForm = new RegisterForm();
+				//$registerForm = new RegisterForm();
 			}
 			return $this->render('register', ['registerForm' => $registerForm]);
 	}
 
 	// 用户登录
 	public function actionLogin(){
-		$this->layout = false;
-		$user = new User();
+		$this->layout	= 'login';
+		$loginForm		= new LoginForm();
 		$post = Yii::$app->request->post();
-		if($user->load($post)){
-			if($user->login()){
+		if($loginForm->load($post)){
+			if(User::login($loginForm)){
+				Yii::$app->session->setFlash('message', '用户登录成功。');
 				$this->redirect(Url::toRoute("/site/index"));
+				Yii::$app->end();
 			}
 			else{
 				Yii::$app->session->setFlash('message', '用户名或者密码错。');
 			}
 		}
-		return $this->render('login', ['user' => $user]);
+		return $this->render('login', ['loginForm' => $loginForm]);
 	}
 
 	// 修改密码
