@@ -69,7 +69,7 @@ class User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'mobile', 'password', 'firsttime', 'updatetime', 'communityid', 'identification', 'address'], 'required'],
+            [['name', 'mobile', 'area', 'password', 'firsttime', 'updatetime', 'communityid', 'identification', 'address'], 'required'],
             [['firsttime', 'updatetime'], 'safe'],
             [['mobile'], 'string', 'min' => 11, 'max' => 11, 'message' => '请输入11位的手机号'],
             [['communityid'], 'integer'],

@@ -87,8 +87,19 @@ class SiteController extends Controller
     		echo $user->name . '<br />';
     	}
     }
+
+    public function actionArea(){
+    	$reg = User::find()->where(['area' => 0])->one();
+    	while($reg){
+    		$reg->area = rand(6000, 13800)/100;
+    		$reg->save();
+    		echo $reg->name . '<br />';
+    		$reg = User::find()->where(['area' => 0])->one();
+    	}
+    }
     public function actionAddlist(){
-    	for($i=0;$i<50;$i++){
+    	die("虚拟100个提交的数据");
+    	for($i=0;$i<100;$i++){
     		$register = new Register();
     		$register->userid 		= rand(92,121);
 			$register->target_communityid = rand(1,5);
