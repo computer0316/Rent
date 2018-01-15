@@ -104,17 +104,11 @@ class UserController extends Controller
 			if($registerForm->load($post)){
 				$user = User::find()->where(['identification' => $registerForm->identification])->one();
 				if($user){
-					$user->mobile		= $registerForm->mobile;
-					$user->password		= md5($registerForm->password);
-					if($user->register()){
-						Yii::$app->session->setFlash('message', "注册成功。");
+					if($user->mobile == $registerForm->mobile){
+						Yii::$app->session->setFlash('message', "此手机号已注册，请直接登录。");
 					}
 					else{
-						$errors = $user->getFirstErrors();
-						foreach($errors as $error){
-							Yii::$app->session->setFlash('message', $error);
-							break;
-						}
+						return $this->render('captcha', ['user' => $user]);
 					}
 				}
 				else{

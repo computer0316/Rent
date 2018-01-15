@@ -18,11 +18,7 @@
 			?>
 				<?= $form->field($registerForm, 'mobile')->textInput(['autofocus' => true]) ?>
 
-				<?= $form->field($registerForm, 'identification')->textInput() ?>
-
-				<?= $form->field($registerForm, 'password')->passwordInput() ?>
-
-				<?= $form->field($registerForm, 'password1')->passwordInput() ?>
+				<?= $form->field($registerForm, 'identification')->textInput(['placeholder' => '在房管局登记过的身份证号码']) ?>
 
 				<?= $form->field($registerForm, 'verifyCode')->widget(Captcha::className(), ['imageOptions' => ['class' => "captcha"]]) ?>
 
