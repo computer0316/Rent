@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <div>
 		<table class="sp-grid-import">
-			<tr><td>时间</td><td>姓名</td><td>电话</td><td>现居小区</td><td>房屋面积</td><td>目标小区</td></tr>
+			<tr><td>时间</td><td>姓名</td><td>电话</td><td>房屋面积</td><td>现居小区</td><td>目标小区</td></tr>
 	<?
 		foreach($registers as $register){
 			echo '<tr>';

@@ -113,7 +113,7 @@ class SiteController extends Controller
 		$query	= Register::find();
 		$count	= $query->count();
 		$pagination = new Pagination(['totalCount' => $count]);
-		$pagination->pageSize = 10;
+		$pagination->pageSize = 18;
 		$registers	= $query->offset($pagination->offset)
 					->limit($pagination->limit)
 					->all();

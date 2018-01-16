@@ -13,16 +13,16 @@
 			<span id="logintitle">房屋交换系统用户登录</span>
 <?php
 
-	$form = ActiveForm::begin(['action' => Url::toRoute('user/register-done'), 'id' => 'clientform']);
+	$form = ActiveForm::begin(['action' => Url::toRoute('user/get-sms'), 'id' => 'clientform']);
 ?>
 
 	<div class="form-group">
 
-		<?= $form->field($SMSForm, 'mobile')->hiddenInput(['value' => $SMSForm->mobile])->label(false) ?>
+		<?= $form->field($smsForm, 'mobile')->hiddenInput(['value' => $smsForm->mobile])->label(false) ?>
 
-		<?= $form->field($SMSForm, 'SMSCode')->textInput(['value' => $SMSForm->SMSCode]) ?>
+		<?= $form->field($smsForm, 'SmsCode')->textInput(['value' => $smsForm->SmsCode]) ?>
 
-		<?= $form->field($SMSForm, 'identification')->hiddenInput(['value' => $SMSForm->identification])->label(false) ?>
+		<?= $form->field($smsForm, 'identification')->hiddenInput(['value' => $smsForm->identification])->label(false) ?>
 
 	</div>
 

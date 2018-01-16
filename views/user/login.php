@@ -18,8 +18,6 @@
 
 	<?= $form->field($loginForm, 'mobile')->textInput(['autofocus' => true, 'class' => 'menu1']) ?>
 
-	<?= $form->field($loginForm, 'password')->passwordInput(['class' => 'menu2']) ?>
-
 	<?= $form->field($loginForm, 'verifyCode')->widget(Captcha::className(), ['imageOptions' => ['class' => "captcha"]]) ?>
 
 <div class="form-group button-group">

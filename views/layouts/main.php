@@ -9,6 +9,8 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\models\User;
+use yii\helpers\VarDumper;
 
 //AppAsset::register($this);
 ?>
@@ -35,14 +37,21 @@ use app\assets\AppAsset;
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+    $userid = Yii::$app->session->get('userid');
+    $items[] = ['label' => '首页', 'url' => ['/site/index']];
+    $items[] = ['label' => '列表', 'url' => ['/site/list']];
+
+	if(isset($userid)){
+		$items[] = ['label' => User::findOne(Yii::$app->session->get('userid'))->name];
+	}
+	else{
+		$items[] = ['label' => '登录', 'url' => ['/user/login']];
+		$items[] = ['label' => '注册', 'url' => ['/user/register']];
+	}
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => '首页', 'url' => ['/site/index']],
-            ['label' => '列表', 'url' => ['/site/list']],
-            ['label' => '登录', 'url' => ['/user/login']],
-            ['label' => '注册', 'url' => ['/user/register']],
-        ],
+        'items' => $items,
     ]);
     NavBar::end();
     ?>
@@ -58,7 +67,7 @@ use app\assets\AppAsset;
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; 廊坊市住房保障和房产管理局 <?= date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

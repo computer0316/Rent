@@ -15,9 +15,7 @@ use yii\base\Model;
 class LoginForm extends Model
 {
     public $mobile;
-    public $password;
     public $verifyCode;
-    public $rememberMe = true;
 
     private $_user = false;
 
@@ -29,11 +27,7 @@ class LoginForm extends Model
     {
         return [
             // username and password are both required
-            [['mobile', 'password', 'verifyCode'], 'required'],
-            // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
+            [['mobile', 'verifyCode'], 'required'],
             ['verifyCode', 'captcha', 'message'=>'验证码输入错误'],
         ];
     }
@@ -46,7 +40,6 @@ class LoginForm extends Model
     {
         return [
             'mobile'		=> '手机号',
-            'password'		=> '密码',
             'verifyCode'	=> '验证码',
         ];
     }

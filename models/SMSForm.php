@@ -15,7 +15,7 @@ class SMSForm extends Model
 {
     public $mobile;
     public $identification;
-    public $SMSCode;
+    public $SmsCode;
 
 
 
@@ -25,7 +25,7 @@ class SMSForm extends Model
     public function rules()
     {
         return [
-            [['mobile', 'identification', 'SMSCode'], 'required'],
+            [['mobile', 'identification', 'SmsCode'], 'required'],
         ];
     }
 
@@ -37,7 +37,7 @@ class SMSForm extends Model
         return [
             'mobile'		=> '手机号',
             'identification'=> '身份证号',
-            'SMSCode'	=> '验证码',
+            'SmsCode'	=> '验证码',
         ];
     }
 

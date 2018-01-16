@@ -116,10 +116,11 @@ class UserController extends Controller
 						return $this->redirect(['user/login']);
 					}
 					else{
-						$SMSForm = new SMSForm();
-						$SMSForm->mobile =  $registerForm->mobile;
-						$SMSForm->identification =$registerForm->identification;
-						return $this->render('sms', ['SMSForm' => $SMSForm]);
+						$smsForm = new SMSForm();
+						$smsForm->mobile =  $registerForm->mobile;
+						$smsForm->identification =$registerForm->identification;
+						Yii::$app->session->set('smscode', rand(100000,999999));
+						return $this->render('sms', ['smsForm' => $smsForm]);
 					}
 				}
 				else{
@@ -131,11 +132,16 @@ class UserController extends Controller
 	}
 
 
-	public function actionRegisterDone(){
+	public function actionGetSms(){
 		$post = Yii::$app->request->post();
-		$SMSForm = new SMSForm();
-		if($SMSForm->load($post)){
-			VarDumper::Dump($SMSForm);
+		$smsForm = new SMSForm();
+		if($smsForm->load($post)){
+			if($smsForm->SmsCode == Yii::$app->session->get('smscode')){
+				echo 'done';
+			}
+			else {
+			 	echo 'something is wrong';
+			}
 		}
 		else{
 			echo 'false';
@@ -145,14 +151,17 @@ class UserController extends Controller
 
 	// 用户登录
 	public function actionLogin(){
+		//Yii::$app->session->remove('userid');
+		Yii::$app->session->set('userid', 100);
+		return $this->redirect(Url::toRoute("/site/index"));
 		$this->layout	= 'login';
 		$loginForm		= new LoginForm();
 		$post = Yii::$app->request->post();
 		if($loginForm->load($post)){
 			if(User::login($loginForm)){
 				Yii::$app->session->setFlash('message', '用户登录成功。');
-				$this->redirect(Url::toRoute("/site/index"));
-				Yii::$app->end();
+				return $this->redirect(Url::toRoute("/site/index"));
+				//Yii::$app->end();
 			}
 			else{
 				Yii::$app->session->setFlash('message', '用户名或者密码错。');
