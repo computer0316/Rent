@@ -13,12 +13,18 @@
 			<span id="logintitle">房屋交换系统用户登录</span>
 <?php
 
-	$form = ActiveForm::begin(['id' => 'clientform']);
+	$form = ActiveForm::begin(['action' => Url::toRoute('user/register-done'), 'id' => 'clientform']);
 ?>
-<div class="form-group">
-	<div class="control-label">验证码：</div>
-	<?=Html::input('text', 'captcha', '', [])?>
-</div>
+
+	<div class="form-group">
+
+		<?= $form->field($SMSForm, 'mobile')->hiddenInput(['value' => $SMSForm->mobile])->label(false) ?>
+
+		<?= $form->field($SMSForm, 'SMSCode')->textInput(['value' => $SMSForm->SMSCode]) ?>
+
+		<?= $form->field($SMSForm, 'identification')->hiddenInput(['value' => $SMSForm->identification])->label(false) ?>
+
+	</div>
 
 <div class="form-group button-group">
 

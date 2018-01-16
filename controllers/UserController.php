@@ -13,6 +13,7 @@ use app\models\Tools;
 use app\models\LoginForm;
 use app\models\RegisterForm;
 use app\models\User;
+use app\models\SMSForm;
 use yii\base\ErrorException;
 
 
@@ -20,7 +21,7 @@ use yii\base\ErrorException;
 class UserController extends Controller
 {
 	public $enableCsrfValidation = true;
-
+/*
 	public function beforeAction($action)
 	{
 		if (parent::beforeAction($action)) {
@@ -31,7 +32,7 @@ class UserController extends Controller
 		}
 
 		return false;
-	}
+	}*/
 	    /**
      * @inheritdoc
      */
@@ -101,14 +102,24 @@ class UserController extends Controller
 		$this->layout = 'login';
 		$registerForm = new RegisterForm();
 		$post = Yii::$app->request->post();
+		$user = new User();
+		if($user->load($post)){
+			VarDumper::Dump($user);
+			die();
+		}
 			if($registerForm->load($post)){
 				$user = User::find()->where(['identification' => $registerForm->identification])->one();
 				if($user){
-					if($user->mobile == $registerForm->mobile){
+					if(User::find()->where(['mobile' => $registerForm->mobile])->one()){
 						Yii::$app->session->setFlash('message', "此手机号已注册，请直接登录。");
+
+						return $this->redirect(['user/login']);
 					}
 					else{
-						return $this->render('captcha', ['user' => $user]);
+						$SMSForm = new SMSForm();
+						$SMSForm->mobile =  $registerForm->mobile;
+						$SMSForm->identification =$registerForm->identification;
+						return $this->render('sms', ['SMSForm' => $SMSForm]);
 					}
 				}
 				else{
@@ -117,6 +128,19 @@ class UserController extends Controller
 				//$registerForm = new RegisterForm();
 			}
 			return $this->render('register', ['registerForm' => $registerForm]);
+	}
+
+
+	public function actionRegisterDone(){
+		$post = Yii::$app->request->post();
+		$SMSForm = new SMSForm();
+		if($SMSForm->load($post)){
+			VarDumper::Dump($SMSForm);
+		}
+		else{
+			echo 'false';
+		}
+
 	}
 
 	// 用户登录
