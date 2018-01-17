@@ -16,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
 .sp-grid-import tbody td{text-align: center;line-height:20px;padding:8px 10px;font-size:13px;border-bottom:1px solid #E1E6EB; border-left:1px solid #E1E6EB;}
 </style>
 <div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
     <div>
 		<table class="sp-grid-import">
 			<tr><td>时间</td><td>姓名</td><td>电话</td><td>房屋面积</td><td>现居小区</td><td>目标小区</td></tr>
@@ -32,10 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
 			echo '</tr>';
 		}
+	?>
+		</table>
+		<?
 		echo LinkPager::widget([
 			'pagination' => $pagination,
 		]);
-	?>
-		</table>
+		?>
 	</div>
 </div>

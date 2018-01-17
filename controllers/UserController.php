@@ -15,6 +15,7 @@ use app\models\RegisterForm;
 use app\models\User;
 use app\models\SMSForm;
 use yii\base\ErrorException;
+use yii\Roc\IO;
 
 
 
@@ -79,6 +80,12 @@ class UserController extends Controller
         ];
     }
 
+	public function actionTest(){
+		$contents = IO::getStringsFromFile("d:\a.txt");
+		foreach($contents as $content){
+			echo $content;
+		}
+	}
 	public function actionDoubleColorBall(){
 		$this->layout = false;
 		$temp = rand(1,33);
@@ -133,6 +140,19 @@ class UserController extends Controller
 
 
 	public function actionGetSms(){
+
+		$session = Yii::$app->session;
+
+		if(isset($session['test'])){
+			echo $session['test'];
+		}
+		else{
+			$session['test']  = 'test';
+			$session->setTimeout(10);
+			echo 'set';
+		}
+		return;
+		$this->layout = 'login';
 		$post = Yii::$app->request->post();
 		$smsForm = new SMSForm();
 		if($smsForm->load($post)){
@@ -140,7 +160,8 @@ class UserController extends Controller
 				echo 'done';
 			}
 			else {
-			 	echo 'something is wrong';
+			 	Yii::$app->session->setFlash('message',"验证码错误");
+			 	return $this->render('sms', ['smsForm' => $smsForm]);
 			}
 		}
 		else{
