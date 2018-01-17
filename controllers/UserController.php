@@ -16,6 +16,7 @@ use app\models\User;
 use app\models\SMSForm;
 use yii\base\ErrorException;
 use yii\Roc\IO;
+use yii\Roc\Session;
 
 
 
@@ -71,20 +72,20 @@ class UserController extends Controller
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-                'height' => 40,
-                'width' => 80,
+				'fixedVerifyCode' => substr(md5(time()),11,4),
+                'height' => 50,
+                'width' => 100,
+                'maxLength' => 4,
                 'minLength' => 4,
-                'maxLength' => 4
+
             ],
         ];
     }
 
 	public function actionTest(){
-		$contents = IO::getStringsFromFile("d:\a.txt");
-		foreach($contents as $content){
-			echo $content;
-		}
+
+		Yii::$app->session->remove('userid');
+
 	}
 	public function actionDoubleColorBall(){
 		$this->layout = false;
@@ -119,7 +120,6 @@ class UserController extends Controller
 				if($user){
 					if(User::find()->where(['mobile' => $registerForm->mobile])->one()){
 						Yii::$app->session->setFlash('message', "此手机号已注册，请直接登录。");
-
 						return $this->redirect(['user/login']);
 					}
 					else{
@@ -173,8 +173,8 @@ class UserController extends Controller
 	// 用户登录
 	public function actionLogin(){
 		//Yii::$app->session->remove('userid');
-		Yii::$app->session->set('userid', 100);
-		return $this->redirect(Url::toRoute("/site/index"));
+		//Yii::$app->session->set('userid', 100);
+		//return $this->redirect(Url::toRoute("/site/index"));
 		$this->layout	= 'login';
 		$loginForm		= new LoginForm();
 		$post = Yii::$app->request->post();

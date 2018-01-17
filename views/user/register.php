@@ -20,7 +20,11 @@
 
 				<?= $form->field($registerForm, 'identification')->textInput(['placeholder' => '在房管局登记过的身份证号码']) ?>
 
-				<?= $form->field($registerForm, 'verifyCode')->widget(Captcha::className(), ['imageOptions' => ['class' => "captcha"]]) ?>
+				<?= $form->field($registerForm, 'verifyCode')->widget(Captcha::className(),[
+																			'captchaAction'	=> 'user/captcha',
+                                        									'imageOptions'	=> ['class' => 'captcha'],
+                                        									]);
+                                        									?>
 
 				<div class="form-group button-group">
 
