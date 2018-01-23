@@ -19,31 +19,6 @@ use yii\helpers\Url;
 
 class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * @inheritdoc
@@ -57,42 +32,6 @@ class SiteController extends Controller
         ];
     }
 
-    public function actionTemp(){
-    	echo '<meta charset="utf-8">';
-    	$strs = IO::getStringsFromFile("f:\identification.txt");
-    	$i = 0;
-    	foreach($strs as $str){
-    		$person		= explode("\t", $str);
-    		if(!$person[0]){
-    			break;
-    		}
-    		$user		= new User();
-    		$user->name				= $person[0];
-    		$user->mobile 			= "139031600" . str_pad($i++, 2, "0", STR_PAD_LEFT);
-    		$user->identification	= $person[1];
-    		$user->updatetime		= date("Y-m-d H:i:s");
-    		$user->firsttime		= date("Y-m-d H:i:s");
-    		$user->password			= "2226ce94cf0f3231556d320a9260f037";
-    		$user->ip				= "192.168.1.6";
-    		$user->communityid		= rand(1,5);
-    		$user->address			= rand(1,10) . '-' . rand(1,3) . '-' . rand(1,24) . str_pad(rand(1,3), 2, "0", STR_PAD_LEFT);
-    		if(!$user->save()){
-    			VarDumper::Dump($user->errors);
-    			die();
-    		}
-    		echo $user->name . '<br />';
-    	}
-    }
-
-    public function actionArea(){
-    	$reg = User::find()->where(['area' => 0])->one();
-    	while($reg){
-    		$reg->area = rand(6000, 13800)/100;
-    		$reg->save();
-    		echo $reg->name . '<br />';
-    		$reg = User::find()->where(['area' => 0])->one();
-    	}
-    }
     public function actionAddlist(){
     	die("虚拟100个提交的数据");
     	for($i=0;$i<100;$i++){
@@ -160,38 +99,6 @@ class SiteController extends Controller
 			return $this->render('add', ['register' => $register]);
 		}
 	}
-
-    /**
-     * Login action.
-     *
-     * @return Response|string
-     */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-        return $this->render('login', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
 
     /**
      * Displays contact page.

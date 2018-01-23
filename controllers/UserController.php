@@ -17,6 +17,7 @@ use app\models\SMSForm;
 use yii\base\ErrorException;
 use yii\Roc\IO;
 use yii\Roc\Session;
+use yii\Roc\SMS;
 
 
 
@@ -82,11 +83,6 @@ class UserController extends Controller
         ];
     }
 
-	public function actionTest(){
-
-		Yii::$app->session->remove('userid');
-
-	}
 	public function actionDoubleColorBall(){
 		$this->layout = false;
 		$temp = rand(1,33);
@@ -107,57 +103,52 @@ class UserController extends Controller
 
 	// 用户注册
 	public function actionRegister(){
-		$this->layout = 'login';
-		$registerForm = new RegisterForm();
-		$post = Yii::$app->request->post();
-		$user = new User();
-		if($user->load($post)){
-			VarDumper::Dump($user);
-			die();
-		}
-			if($registerForm->load($post)){
-				$user = User::find()->where(['identification' => $registerForm->identification])->one();
-				if($user){
-					if(User::find()->where(['mobile' => $registerForm->mobile])->one()){
-						Yii::$app->session->setFlash('message', "此手机号已注册，请直接登录。");
-						return $this->redirect(['user/login']);
-					}
-					else{
-						$smsForm = new SMSForm();
-						$smsForm->mobile =  $registerForm->mobile;
-						$smsForm->identification =$registerForm->identification;
-						Yii::$app->session->set('smscode', rand(100000,999999));
-						return $this->render('sms', ['smsForm' => $smsForm]);
-					}
+		$this->layout = 'login';	// 采用login显示格式
+		$registerForm = new RegisterForm();	// 新建一个 registerForm 模型
+		$post = Yii::$app->request->post(); // post 数据提交到一个变量
+		if($registerForm->load($post)){		// 从 post 数据载入到模型类实力
+			// 检查身份证是否存在
+			$user = User::find()->where(['identification' => $registerForm->identification])->one();
+			if($user){	// 如存在，则开始注册流程
+				if(User::find()->where(['mobile' => $registerForm->mobile])->one()){
+					Yii::$app->session->setFlash('message', "此手机号已注册，请直接登录。");
+					return $this->redirect(['user/login']);
 				}
 				else{
-					Yii::$app->session->setFlash('message', '数据库中不存在此身份证！');
+					$smsForm = new SMSForm();
+					$smsForm->mobile =  $registerForm->mobile;
+					$smsForm->identification = $registerForm->identification;
+					$smsCode = rand(100000,999999);
+					Yii::$app->session->set('smscode', $smsCode);
+					SMS::send($smsForm->mobile, "【房管局公共住房】验证码：" . $smsCode);
+					return $this->render('sms', ['smsForm' => $smsForm]);
 				}
-				//$registerForm = new RegisterForm();
 			}
-			return $this->render('register', ['registerForm' => $registerForm]);
+			else{	// 如身份证不存在，则提示后返回
+				Yii::$app->session->setFlash('message', '数据库中不存在此身份证！');
+			}
+			//$registerForm = new RegisterForm();
+		}
+		return $this->render('register', ['registerForm' => $registerForm]);
 	}
 
 
 	public function actionGetSms(){
-
+		$this->layout = 'login';
 		$session = Yii::$app->session;
 
-		if(isset($session['test'])){
-			echo $session['test'];
-		}
-		else{
-			$session['test']  = 'test';
-			$session->setTimeout(10);
-			echo 'set';
-		}
-		return;
-		$this->layout = 'login';
 		$post = Yii::$app->request->post();
 		$smsForm = new SMSForm();
 		if($smsForm->load($post)){
 			if($smsForm->SmsCode == Yii::$app->session->get('smscode')){
-				echo 'done';
+				$id = User::register($smsForm);
+				if($id){
+					$session->set('userid', $id);
+					return $this->redirect(Url::toRoute('site/index'));
+				}
+				else{
+					Yii::$app->session->setFlash('message',"注册失败，请联系管理员。");
+				}
 			}
 			else {
 			 	Yii::$app->session->setFlash('message',"验证码错误");
@@ -165,16 +156,13 @@ class UserController extends Controller
 			}
 		}
 		else{
-			echo 'false';
+			Yii::$app->session->setFlash('message',"smsForm读取失败，请联系管理员。");
 		}
 
 	}
 
 	// 用户登录
 	public function actionLogin(){
-		//Yii::$app->session->remove('userid');
-		//Yii::$app->session->set('userid', 100);
-		//return $this->redirect(Url::toRoute("/site/index"));
 		$this->layout	= 'login';
 		$loginForm		= new LoginForm();
 		$post = Yii::$app->request->post();
@@ -210,12 +198,7 @@ class UserController extends Controller
 	}
 
 	public function actionLogout(){
-		User::logout();
+		Yii::$app->session->remove('userid');
 		$this->redirect(Url::toRoute("/site/index"));
-	}
-
-	public function actionMd5(){
-		echo '*' . md5('rocisaboy') . '*';
-
 	}
 }

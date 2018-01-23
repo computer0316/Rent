@@ -39,10 +39,11 @@ use yii\helpers\VarDumper;
     ]);
     $userid = Yii::$app->session->get('userid');
     $items[] = ['label' => '首页', 'url' => ['/site/index']];
-    $items[] = ['label' => '列表', 'url' => ['/site/list']];
+    //$items[] = ['label' => '列表', 'url' => ['/site/list']];
 
 	if(isset($userid)){
 		$items[] = ['label' => User::findOne(Yii::$app->session->get('userid'))->name];
+		$items[] = ['label' => '退出', 'url' => ['/user/logout']];
 	}
 	else{
 		$items[] = ['label' => '登录', 'url' => ['/user/login']];

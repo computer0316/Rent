@@ -23,7 +23,7 @@
 		<?= $form->field($smsForm, 'SmsCode')->textInput(['value' => $smsForm->SmsCode]) ?>
 
 		<?= $form->field($smsForm, 'identification')->hiddenInput(['value' => $smsForm->identification])->label(false) ?>
-		<?= Yii::$app->session->get('smscode') ?>
+
 	</div>
 
 <div class="form-group button-group">

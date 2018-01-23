@@ -33,10 +33,17 @@ class User extends \yii\db\ActiveRecord
 	public $password1;
 
 	// 新用户注册
-	public function register(){
-		$this->updatetime	= date("Y-m-d H:i:s");
-		$this->ip			= Yii::$app->request->getUserIP();
-		return $this->save();
+	public static function register($smsForm){
+		$user = self::find()->where(['identification' => $smsForm->identification])->one();
+		if($user){
+			$user->mobile		= $smsForm->mobile;
+			$user->updatetime	= date("Y-m-d H:i:s");
+			$user->ip			= Yii::$app->request->getUserIP();
+			return $user->id;
+		}
+		else{
+			return false;
+		}
 	}
 
 	public static function login($loginForm){
