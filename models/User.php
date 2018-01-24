@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\ErrorException;
+use yii\helpers\VarDumper;
 
 /**
  * This is the model class for table "user".
@@ -30,7 +31,6 @@ class User extends \yii\db\ActiveRecord
         return 'user';
     }
 
-	public $password1;
 
 	// 新用户注册
 	public static function register($smsForm){
@@ -47,10 +47,7 @@ class User extends \yii\db\ActiveRecord
 	}
 
 	public static function login($loginForm){
-		$user = self::find()->where([
-			'mobile'	=> $loginForm->mobile,
-			'password'	=> md5($loginForm->password)
-			])->one();
+		$user = self::find()->where(['mobile'	=> $loginForm->mobile])->one();
 		if($user){
 			Yii::$app->session->set('userid', $user->id);
 		}

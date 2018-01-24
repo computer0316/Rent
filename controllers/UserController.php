@@ -13,7 +13,6 @@ use app\models\Tools;
 use app\models\LoginForm;
 use app\models\RegisterForm;
 use app\models\User;
-use app\models\SMSForm;
 use yii\base\ErrorException;
 use yii\Roc\IO;
 use yii\Roc\Session;
@@ -24,43 +23,6 @@ use yii\Roc\SMS;
 class UserController extends Controller
 {
 	public $enableCsrfValidation = true;
-/*
-	public function beforeAction($action)
-	{
-		if (parent::beforeAction($action)) {
-			if ($this->enableCsrfValidation) {
-				Yii::$app->getRequest()->getCsrfToken(true);
-			}
-			return true;
-		}
-
-		return false;
-	}*/
-	    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * @inheritdoc
@@ -73,7 +35,7 @@ class UserController extends Controller
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
-				'fixedVerifyCode' => substr(md5(time()),11,4),
+				'fixedVerifyCode' => substr(rand(1000,9999), 0),
                 'height' => 50,
                 'width' => 100,
                 'maxLength' => 4,
@@ -81,6 +43,11 @@ class UserController extends Controller
 
             ],
         ];
+    }
+
+    public function actionTest(){
+    	echo rand(1000, 9999);
+    	echo Yii::$app->session->get('userid');
     }
 
 	public function actionDoubleColorBall(){
@@ -101,8 +68,11 @@ class UserController extends Controller
 		]);
 	}
 
-	// 用户注册
-	public function actionRegister(){
+	/*
+		用于已经有身份证的用户注册
+	*/
+
+	public function actionRegisterOld(){
 		$this->layout = 'login';	// 采用login显示格式
 		$registerForm = new RegisterForm();	// 新建一个 registerForm 模型
 		$post = Yii::$app->request->post(); // post 数据提交到一个变量
@@ -115,13 +85,13 @@ class UserController extends Controller
 					return $this->redirect(['user/login']);
 				}
 				else{
-					$smsForm = new SMSForm();
-					$smsForm->mobile =  $registerForm->mobile;
-					$smsForm->identification = $registerForm->identification;
+					$loginForm = new loginForm(['scenario' => 'register']);
+					$loginForm->mobile =  $registerForm->mobile;
+					$loginForm->identification = $registerForm->identification;
 					$smsCode = rand(100000,999999);
 					Yii::$app->session->set('smscode', $smsCode);
-					SMS::send($smsForm->mobile, "【房管局公共住房】验证码：" . $smsCode);
-					return $this->render('sms', ['smsForm' => $smsForm]);
+					//SMS::send($loginForm->mobile, "【房管局公共住房】验证码：" . $smsCode);
+					return $this->render('sms', ['loginForm'	=> $loginForm]);
 				}
 			}
 			else{	// 如身份证不存在，则提示后返回
@@ -132,16 +102,8 @@ class UserController extends Controller
 		return $this->render('register', ['registerForm' => $registerForm]);
 	}
 
-
-	public function actionGetSms(){
-		$this->layout = 'login';
-		$session = Yii::$app->session;
-
-		$post = Yii::$app->request->post();
-		$smsForm = new SMSForm();
-		if($smsForm->load($post)){
-			if($smsForm->SmsCode == Yii::$app->session->get('smscode')){
-				$id = User::register($smsForm);
+	public function actionRegisterok(){
+		$id = User::register($loginForm);
 				if($id){
 					$session->set('userid', $id);
 					return $this->redirect(Url::toRoute('site/index'));
@@ -149,14 +111,32 @@ class UserController extends Controller
 				else{
 					Yii::$app->session->setFlash('message',"注册失败，请联系管理员。");
 				}
+	}
+
+
+	public function actionGetSms(){
+		$this->layout = 'login';
+		$session = Yii::$app->session;
+
+		$post = Yii::$app->request->post();
+		$loginForm = new loginForm();
+		if($loginForm->load($post)){
+			if($loginForm->smsCode == Yii::$app->session->get('smscode')){
+				if($loginForm->method == 'login'){
+					User::login($loginForm);
+				}
+				else{
+					User::register($loginForm);
+				}
+				return $this->redirect(Url::toRoute('site/index'));
 			}
 			else {
 			 	Yii::$app->session->setFlash('message',"验证码错误");
-			 	return $this->render('sms', ['smsForm' => $smsForm]);
+			 	return $this->render('sms', ['loginForm' => $loginForm]);
 			}
 		}
 		else{
-			Yii::$app->session->setFlash('message',"smsForm读取失败，请联系管理员。");
+			Yii::$app->session->setFlash('message',"loginForm读取失败，请联系管理员。");
 		}
 
 	}
@@ -167,34 +147,20 @@ class UserController extends Controller
 		$loginForm		= new LoginForm();
 		$post = Yii::$app->request->post();
 		if($loginForm->load($post)){
-			if(User::login($loginForm)){
-				Yii::$app->session->setFlash('message', '用户登录成功。');
-				return $this->redirect(Url::toRoute("/site/index"));
-				//Yii::$app->end();
+			if(User::find()->where(['mobile' => $loginForm->mobile])->one()){
+				$loginForm->identification	= '111111111111111111';
+				$loginForm->method			= 'login';
+				$smsCode = rand(100000,999999);
+				Yii::$app->session->set('smscode', $smsCode);
+				//SMS::send($loginForm->mobile, "【房管局公共住房】验证码：" . $smsCode);
+				return $this->render('sms', ['loginForm' 	=> $loginForm]);
 			}
 			else{
-				Yii::$app->session->setFlash('message', '用户名或者密码错。');
+				Yii::$app->session->setFlash('message',"手机号还没有注册，请先注册。");
+				return $this->redirect(Url::toRoute('user/register'));
 			}
 		}
 		return $this->render('login', ['loginForm' => $loginForm]);
-	}
-
-	// 修改密码
-	public function actionChpass(){
-		try{
-			$userLoad = new User(['scenario' => 'changepassword']);
-			if($userLoad->load(Yii::$app->request->post())){
-				$user = User::findOne(Yii::$app->session->get('userid'));
-				$user->changePassword($userLoad);
-				Yii::$app->session->setFlash('message', '密码修改成功');
-			}
-		}
-		catch(Exception $e){
-			Yii::$app->session->setFlash('message', $e->getMessage());
-		}
-		return $this->render('chpass', [
-			'user'	=> $userLoad,
-			]);
 	}
 
 	public function actionLogout(){

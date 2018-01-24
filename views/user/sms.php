@@ -18,13 +18,14 @@
 
 	<div class="form-group">
 
-		<?= $form->field($smsForm, 'mobile')->hiddenInput(['value' => $smsForm->mobile])->label(false) ?>
-
-		<?= $form->field($smsForm, 'SmsCode')->textInput(['value' => $smsForm->SmsCode]) ?>
-
-		<?= $form->field($smsForm, 'identification')->hiddenInput(['value' => $smsForm->identification])->label(false) ?>
+		<?= $form->field($loginForm, 'smsCode')->textInput(['value' => $loginForm->smsCode]) ?>
 
 	</div>
+		<?= $form->field($loginForm, 'mobile')->hiddenInput(['value' => $loginForm->mobile])->label(false) ?>
+		<?= $form->field($loginForm, 'identification')->hiddenInput(['value' => $loginForm->identification])->label(false) ?>
+		<?= $form->field($loginForm, 'method')->hiddenInput(['value' => $loginForm->method])->label(false) ?>
+		<?= Yii::$app->session->get('smscode') ?>
+
 
 <div class="form-group button-group">
 
