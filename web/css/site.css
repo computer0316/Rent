@@ -113,3 +113,49 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+/********************************** table **********************************/
+.sp-grid-import{border-collapse: collapse;width:100%; border:1px solid #E1E6EB; border-left:none;}
+.sp-grid-import thead th{line-height:20px;padding:8px 12px; border-bottom:1px solid #E1E6EB; border-left:1px solid #E1E6EB; white-space: nowrap; text-align:center; font-weight:normal !important;letter-spacing:1px;}
+.sp-grid-import tbody td{text-align: center;line-height:20px;padding:8px 10px;font-size:13px;border-bottom:1px solid #E1E6EB; border-left:1px solid #E1E6EB;}
+
+
+/********************************** layout **********************************/
+.left{
+	float:left;
+	width:140px;
+	height:800px;
+}
+.left ul{
+	float:left;
+	margin:0px;
+	padding:0px;
+	width:100%;
+	list-style-type:none;
+}
+.left ul li{
+	float:left;
+	width:100%;
+	height:35px;
+	line-height:35px;
+
+}
+
+
+.left ul li a:hover{
+	color:red;
+	background:#9999ff;
+}
+
+.left ul li a{
+	display:block;
+	padding-left:10px;
+	width:100%;
+	text-decoration:none;
+}
+
+
+.right{
+	float:left;
+	width:800px;
+}

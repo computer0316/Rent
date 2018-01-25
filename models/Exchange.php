@@ -14,14 +14,14 @@ use Yii;
  * @property integer $target_communityid
  * @property string $updatetime
  */
-class Register extends \yii\db\ActiveRecord
+class Exchange extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'register';
+        return 'exchange';
     }
 
     /**

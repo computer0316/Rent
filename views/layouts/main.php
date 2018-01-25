@@ -21,6 +21,7 @@ use yii\helpers\VarDumper;
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/site.css" rel="stylesheet">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -42,12 +43,21 @@ use yii\helpers\VarDumper;
     //$items[] = ['label' => '列表', 'url' => ['/site/list']];
 
 	if(isset($userid)){
-		$items[] = ['label' => User::findOne(Yii::$app->session->get('userid'))->name];
+		$user = User::findOne(Yii::$app->session->get('userid'));
+		$display = '';
+		if($user){
+			if(isset($user->name)){
+				$display = $user->name;
+			}
+			else{
+				$display = $user->mobile;
+			}
+		}
+		$items[] = ['label' => $display, 'url' => ['/user/edit']];
 		$items[] = ['label' => '退出', 'url' => ['/user/logout']];
 	}
 	else{
 		$items[] = ['label' => '登录', 'url' => ['/user/login']];
-		$items[] = ['label' => '注册', 'url' => ['/user/register']];
 	}
 
     echo Nav::widget([
@@ -62,7 +72,21 @@ use yii\helpers\VarDumper;
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
-        <?= $content ?>
+        <div class="left">
+			<ul>
+				<li><a href="?r=user/edit">更新个人信息</a></li>
+				<li><a href="#">这里是菜单</a></li>
+				<li><a href="#">这里是菜单</a></li>
+				<li><a href="#">这里是菜单</a></li>
+				<li><a href="#">这里是菜单</a></li>
+				<li><a href="#">这里是菜单</a></li>
+				<li><a href="#">这里是菜单</a></li>
+				<li><a href="#">这里是菜单</a></li>
+			</ul>
+        </div>
+        <div class="right">
+        	<?= $content ?>
+        </div>
     </div>
 </div>
 

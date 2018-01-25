@@ -16,14 +16,13 @@
 	$form = ActiveForm::begin(['action' => Url::toRoute('user/get-sms'), 'id' => 'clientform']);
 ?>
 
+		<?= $form->field($loginForm, 'mobile')->hiddenInput()->label(false) ?>
+
 	<div class="form-group">
 
-		<?= $form->field($loginForm, 'smsCode')->textInput(['value' => $loginForm->smsCode]) ?>
+		<?= $form->field($loginForm, 'smsCode')->textInput() ?>
 
 	</div>
-		<?= $form->field($loginForm, 'mobile')->hiddenInput(['value' => $loginForm->mobile])->label(false) ?>
-		<?= $form->field($loginForm, 'identification')->hiddenInput(['value' => $loginForm->identification])->label(false) ?>
-		<?= $form->field($loginForm, 'method')->hiddenInput(['value' => $loginForm->method])->label(false) ?>
 		<?= Yii::$app->session->get('smscode') ?>
 
 

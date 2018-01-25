@@ -4,13 +4,11 @@
 	use yii\helpers\Url;
 	use yii\widgets\LinkPager;
 	use yii\captcha\Captcha;
-	use yii\helpers\ArrayHelper;
-	use app\models\Community;
-	use yii\helpers\VarDumper;
 
 	// 客户信息窗体
 
 ?>
+
 	<div class="form1">
 		<div class="form">
 			<span id="logintitle">房屋交换系统用户注册</span>
@@ -18,19 +16,11 @@
 			<?php
 				$form = ActiveForm::begin(['id' => 'clientform']);
 			?>
-				<?= $form->field($user, 'mobile')->textInput(['autofocus' => true]) ?>
+				<?= $form->field($registerForm, 'mobile')->textInput(['autofocus' => true]) ?>
 
-				<?= $form->field($user, 'name')->textInput() ?>
+				<?= $form->field($registerForm, 'identification')->textInput(['placeholder' => '在房管局登记过的身份证号码']) ?>
 
-				<?= $form->field($user, 'identification')->textInput() ?>
-
-				<?php
-					$arr = ArrayHelper::map(Community::find()->all(), 'id', 'name');
-					$arr = array_merge(['请选择小区'], $arr);
-					echo $form->field($user, 'communityid')->dropDownList($arr);
-				?>
-
-				<?= $form->field($user, 'verifyCode')->widget(Captcha::className(),[
+				<?= $form->field($registerForm, 'verifyCode')->widget(Captcha::className(),[
 																			'captchaAction'	=> 'user/captcha',
                                         									'imageOptions'	=> ['class' => 'captcha'],
                                         									]);

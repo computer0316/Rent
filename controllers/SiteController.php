@@ -11,7 +11,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use app\models\Register;
+use app\models\Exchange;
 use app\models\Community;
 use app\models\IO;
 use app\models\User;
@@ -35,25 +35,25 @@ class SiteController extends Controller
     public function actionAddlist(){
     	die("虚拟100个提交的数据");
     	for($i=0;$i<100;$i++){
-    		$register = new Register();
-    		$register->userid 		= rand(92,121);
-			$register->target_communityid = rand(1,5);
-			$register->updatetime = date("Y-m-d H:i:s");
-			$register->save();
-			echo $register->target_communityid . '<br />';
+    		$Exchange = new Exchange();
+    		$Exchange->userid 		= rand(92,121);
+			$Exchange->target_communityid = rand(1,5);
+			$Exchange->updatetime = date("Y-m-d H:i:s");
+			$Exchange->save();
+			echo $Exchange->target_communityid . '<br />';
     	}
     }
 
 	public function actionList(){
-		$query	= Register::find();
+		$query	= Exchange::find();
 		$count	= $query->count();
 		$pagination = new Pagination(['totalCount' => $count]);
 		$pagination->pageSize = 18;
-		$registers	= $query->offset($pagination->offset)
+		$Exchanges	= $query->offset($pagination->offset)
 					->limit($pagination->limit)
 					->all();
 		return $this->render('list', [
-					'registers'		=> $registers,
+					'Exchanges'		=> $Exchanges,
 					'pagination'	=> $pagination,
 					]);
 	}
@@ -79,24 +79,24 @@ class SiteController extends Controller
     }
 
 	public function actionAdd(){
-		$register	= new Register();
+		$Exchange	= new Exchange();
 		$post		= Yii::$app->request->post();
-		if($register->load($post)){
-			$register->userid		= 1;
-			$register->communityid	= 1;
-			$register->address		= '10-2-1102';
-			$register->updatetime = date("Y-m-d H:i:s");
-			//VarDumper::Dump($register);
-			if($register->save()){
+		if($Exchange->load($post)){
+			$Exchange->userid		= 1;
+			$Exchange->communityid	= 1;
+			$Exchange->address		= '10-2-1102';
+			$Exchange->updatetime = date("Y-m-d H:i:s");
+			//VarDumper::Dump($Exchange);
+			if($Exchange->save()){
 				Yii::$app->session->setFlash('message', '信息登记成功');
-				return $this->render('add', ['register' => $register]);
+				return $this->render('add', ['Exchange' => $Exchange]);
 			}
 			else{
-				VarDumper::Dump($register->errors);
+				VarDumper::Dump($Exchange->errors);
 			}
 		}
 		else{
-			return $this->render('add', ['register' => $register]);
+			return $this->render('add', ['Exchange' => $Exchange]);
 		}
 	}
 

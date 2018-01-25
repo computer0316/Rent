@@ -10,24 +10,20 @@
 $this->title = '列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<style>
-.sp-grid-import{border-collapse: collapse;width:100%; border:1px solid #E1E6EB; border-left:none;}
-.sp-grid-import thead th{line-height:20px;padding:8px 12px; border-bottom:1px solid #E1E6EB; border-left:1px solid #E1E6EB; white-space: nowrap; text-align:center; font-weight:normal !important;letter-spacing:1px;}
-.sp-grid-import tbody td{text-align: center;line-height:20px;padding:8px 10px;font-size:13px;border-bottom:1px solid #E1E6EB; border-left:1px solid #E1E6EB;}
-</style>
+
 <div class="site-about">
     <div>
 		<table class="sp-grid-import">
 			<tr><td>时间</td><td>姓名</td><td>电话</td><td>房屋面积</td><td>现居小区</td><td>目标小区</td></tr>
 	<?
-		foreach($registers as $register){
+		foreach($Exchanges as $Exchange){
 			echo '<tr>';
-			echo '<td>' . $register->updatetime . '</td>';
-			echo '<td>' . User::findOne($register->userid)->name . '</td>';
-			echo '<td>' . User::findOne($register->userid)->mobile . '</td>';
-			echo '<td>' . User::findOne($register->userid)->area . '</td>';
-			echo '<td>' . Community::find()->where(['id' => User::findOne($register->userid)->communityid])->one()->name . '</td>';
-			echo '<td>' . Community::findOne($register->target_communityid)->name . '</td>';
+			echo '<td>' . $Exchange->updatetime . '</td>';
+			echo '<td>' . User::findOne($Exchange->userid)->name . '</td>';
+			echo '<td>' . User::findOne($Exchange->userid)->mobile . '</td>';
+			echo '<td>' . User::findOne($Exchange->userid)->area . '</td>';
+			echo '<td>' . Community::find()->where(['id' => User::findOne($Exchange->userid)->communityid])->one()->name . '</td>';
+			echo '<td>' . Community::findOne($Exchange->target_communityid)->name . '</td>';
 
 			echo '</tr>';
 		}
