@@ -12,8 +12,8 @@
 	$form = ActiveForm::begin(['id' => 'clientform']);
 ?>
 
-	<?= $form->field($register, 'target_communityid')->dropDownList(
-		Community::find()->select(['name', 'id'])->indexBy('id')->column(), ['prompt' => '请选择目标小区']
+	<?= $form->field($exchange, 'target_communityid')->dropDownList(
+		Community::find()->select(['name', 'id'])->indexBy('id')->column(), ['prompt' => '请选择小区', 'value' => 0]
 	) ?>
 
 

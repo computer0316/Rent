@@ -12,10 +12,15 @@
 	$form = ActiveForm::begin(['id' => 'clientform']);
 ?>
 
-	 <?= $form->field($exchange, 'target_communityid')->dropDownList(
-		Community::find()->select(['name', 'id'])->indexBy('id')->column(), ['prompt' => '请选择目标小区', 'value' => 0]
+	<?= $form->field($user, 'name')->textInput() ?>
+
+	<?= $form->field($user, 'identification')->textInput() ?>
+
+	<?= $form->field($user, 'communityid')->dropDownList(
+		Community::find()->select(['name', 'id'])->indexBy('id')->column(), ['prompt' => '所属小区', 'value' => $user->communityid]
 	) ?>
 
+	<?= $form->field($user, 'address')->textInput(['placeholder' => '如：12-2-1202']) ?>
 
 	<?= Html::submitButton('提交', ['class' => 'submit']) ?>
 

@@ -124,7 +124,7 @@ a.desc:after {
 .left{
 	float:left;
 	width:140px;
-	height:800px;
+	height:720px;
 }
 .left ul{
 	float:left;
@@ -157,5 +157,6 @@ a.desc:after {
 
 .right{
 	float:left;
-	width:800px;
+	width:950px;
+	margin-left:15px;
 }

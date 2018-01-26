@@ -45,15 +45,22 @@ class SiteController extends Controller
     }
 
 	public function actionList(){
+    	$userid = Yii::$app->session->get('userid');
+    	if(!isset($userid) && $userid <1){
+    		//Yii::$app->session->setFlash('message',"请先登录");
+    		return $this->redirect(Url::toRoute("user/login"));
+    	}
+
+
 		$query	= Exchange::find();
 		$count	= $query->count();
 		$pagination = new Pagination(['totalCount' => $count]);
 		$pagination->pageSize = 18;
-		$Exchanges	= $query->offset($pagination->offset)
+		$exchanges	= $query->offset($pagination->offset)
 					->limit($pagination->limit)
 					->all();
 		return $this->render('list', [
-					'Exchanges'		=> $Exchanges,
+					'exchanges'		=> $exchanges,
 					'pagination'	=> $pagination,
 					]);
 	}

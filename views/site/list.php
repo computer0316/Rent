@@ -13,26 +13,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="site-about">
     <div>
-		<table class="sp-grid-import">
-			<tr><td>时间</td><td>姓名</td><td>电话</td><td>房屋面积</td><td>现居小区</td><td>目标小区</td></tr>
-	<?
-		foreach($Exchanges as $Exchange){
-			echo '<tr>';
-			echo '<td>' . $Exchange->updatetime . '</td>';
-			echo '<td>' . User::findOne($Exchange->userid)->name . '</td>';
-			echo '<td>' . User::findOne($Exchange->userid)->mobile . '</td>';
-			echo '<td>' . User::findOne($Exchange->userid)->area . '</td>';
-			echo '<td>' . Community::find()->where(['id' => User::findOne($Exchange->userid)->communityid])->one()->name . '</td>';
-			echo '<td>' . Community::findOne($Exchange->target_communityid)->name . '</td>';
-
-			echo '</tr>';
+	<?php
+		if(!$exchanges){
+			echo '还没有房屋交换信息';
 		}
-	?>
-		</table>
-		<?
-		echo LinkPager::widget([
-			'pagination' => $pagination,
-		]);
+		else{
+			echo '<table class="sp-grid-import">';
+			echo '<tr><td>时间</td><td>姓名</td><td>电话</td><td>现居小区</td><td>目标小区</td></tr>';
+			foreach($exchanges as $exchange){
+				echo '<tr>';
+				echo '<td>' . substr($exchange->updatetime,0,10) . '</td>';
+				echo '<td>' . User::findOne($exchange->userid)->name . '</td>';
+				echo '<td>' . User::findOne($exchange->userid)->mobile . '</td>';
+				echo '<td>' . Community::find()->where(['id' => User::findOne($exchange->userid)->communityid])->one()->name . '</td>';
+				echo '<td>' . Community::findOne($exchange->target_communityid)->name . '</td>';
+
+				echo '</tr>';
+			}
+			echo '</table>';
+			echo LinkPager::widget(['pagination' => $pagination,]);
+		}
 		?>
 	</div>
 </div>
