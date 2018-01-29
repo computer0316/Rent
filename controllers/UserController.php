@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\base\ErrorException;
+use yii\data\Pagination;
 use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -51,6 +52,25 @@ class UserController extends Controller
     public function actionTest(){
     	echo rand(1000, 9999);
     	echo Yii::$app->session->get('userid');
+    }
+
+    public function actionList(){
+    	$userid = Yii::$app->session->get('userid');
+		if($userid <> 122){
+			return false;
+		}
+
+		$query	= User::find();
+		$count	= $query->count();
+		$pagination = new Pagination(['totalCount' => $count]);
+		$pagination->pageSize = 18;
+		$users	= $query->offset($pagination->offset)
+					->limit($pagination->limit)
+					->all();
+		return $this->render('list', [
+					'users'		=> $users,
+					'pagination'	=> $pagination,
+					]);
     }
 
 	public function actionExchange(){

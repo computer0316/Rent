@@ -32,6 +32,7 @@ class SiteController extends Controller
         ];
     }
 
+
     public function actionAddlist(){
     	die("虚拟100个提交的数据");
     	for($i=0;$i<100;$i++){
