@@ -7,6 +7,16 @@
 	// 客户信息窗体
 
 ?>
+<SCRIPT type="text/javascript">
+            var maxtime = 6; //一个小时，按秒计算，自己调整!
+            function CountDown() {
+            	if(maxtime >= 0){
+                	document.all["timer"].innerHTML = maxtime;
+                	--maxtime;
+                }
+            }
+            timer = setInterval("CountDown()", 1000);
+</SCRIPT>
 
 	<div class="form1">
 		<div class="form">
@@ -21,6 +31,7 @@
 	<div class="form-group">
 
 		<?= $form->field($loginForm, 'smsCode')->textInput() ?>
+		<div id="timer"></div>
 
 	</div>
 

@@ -11,3 +11,11 @@ class TestController extends \yii\web\Controller
     }
 
 }
+
+class Test{
+	public $a='a';
+	public $b='b';
+	public function test{
+		echo 'c';
+	}
+}
