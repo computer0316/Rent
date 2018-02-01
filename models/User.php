@@ -72,7 +72,7 @@ class User extends \yii\db\ActiveRecord
             [['name', 'mobile', 'updatetime', 'communityid', 'identification', 'address'], 'required', 'on' => 'edit'],
             [['mobile'], 'required', 'on' => 'login'],
             [['firsttime', 'updatetime'], 'safe'],
-            [['communityid'], 'in', 'range' => [1,2,3,4,5]],
+            [['communityid'], 'compare', 'compareValue' => 0, 'operator' => '>'],
             [['area'], 'number'],
             [['name', 'mobile', 'address'], 'string', 'max' => 16],
             [['ip'], 'string', 'max' => 32],
