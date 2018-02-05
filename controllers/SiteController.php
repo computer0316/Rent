@@ -46,11 +46,11 @@ class SiteController extends Controller
     }
 
 	public function actionList(){
-    	$userid = Yii::$app->session->get('userid');
-    	if(!isset($userid) && $userid <1){
-    		//Yii::$app->session->setFlash('message',"请先登录");
-    		return $this->redirect(Url::toRoute("user/login"));
-    	}
+//    	$userid = Yii::$app->session->get('userid');
+//    	if(!isset($userid) && $userid <1){
+//    		//Yii::$app->session->setFlash('message',"请先登录");
+//    		return $this->redirect(Url::toRoute("user/login"));
+//    	}
 
 
 		$query	= Exchange::find();
