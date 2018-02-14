@@ -10,7 +10,7 @@
 
 	<div class="form1">
 		<div class="form">
-			<div id="logintitle">房屋交换系统用户登录</div>
+			<div id="logintitle">房屋交换系统用户登录（无需注册，手机号直接登录）</div>
 <?php
 
 	$form = ActiveForm::begin(['id' => 'clientform']);

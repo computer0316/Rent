@@ -7,8 +7,11 @@ use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+use yii\Roc\Mobile;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+
+
 
 //AppAsset::register($this);
 ?>
@@ -18,7 +21,7 @@ use app\assets\AppAsset;
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" type="text/css" href="css/login.css" />
+    <link rel="stylesheet" type="text/css" href="<?=Mobile::isMobile() ? "css/login-mobile" : "css/login"?>.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>

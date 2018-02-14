@@ -123,8 +123,9 @@ a.desc:after {
 /********************************** layout **********************************/
 .left{
 	float:left;
-	width:140px;
+	width:13%;
 	height:720px;
+	border:1px solid blue;
 }
 .left ul{
 	float:left;
@@ -157,6 +158,6 @@ a.desc:after {
 
 .right{
 	float:left;
-	width:950px;
+	width:80%;
 	margin-left:15px;
 }
