@@ -10,7 +10,7 @@
 
 	<div class="form1">
 		<div class="form">
-			<span id="logintitle">房屋交换系统用户登录</span>
+			<div id="logintitle">房屋交换系统用户登录（无需注册，手机号直接登录）</div>
 <?php
 
 	$form = ActiveForm::begin(['id' => 'clientform']);
@@ -24,8 +24,6 @@
 <div class="form-group button-group">
 
 	<?= Html::submitButton('提交', ['class' => 'submit']) ?>
-
-	<span>还没有注册？点<a href="?r=user/register">这里</a>注册</span>
 
 </div>
 

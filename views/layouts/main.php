@@ -32,7 +32,7 @@ use yii\helpers\VarDumper;
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => '房屋交换系统',	//Yii::$app->name,
+        'brandLabel' => '公众住房房屋信息交换中心',	//Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -74,14 +74,14 @@ use yii\helpers\VarDumper;
         <?= Alert::widget() ?>
         <div class="left">
 			<ul>
+				<li><a href="?r=site/list">调房信息列表</a></li>
 				<li><a href="?r=user/edit">更新个人信息</a></li>
-				<li><a href="#">这里是菜单</a></li>
-				<li><a href="#">这里是菜单</a></li>
-				<li><a href="#">这里是菜单</a></li>
-				<li><a href="#">这里是菜单</a></li>
-				<li><a href="#">这里是菜单</a></li>
-				<li><a href="#">这里是菜单</a></li>
-				<li><a href="#">这里是菜单</a></li>
+				<li><a href="?r=user/exchange">发布调房信息</a></li>
+				<?php
+					if($userid == 122){
+						echo '<li><a href="?r=user/list">查看注册用户</a></li>';
+					}
+				?>
 			</ul>
         </div>
         <div class="right">

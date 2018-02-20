@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\base\ErrorException;
+use yii\data\Pagination;
 use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -53,9 +54,73 @@ class UserController extends Controller
     	echo Yii::$app->session->get('userid');
     }
 
+    public function actionList(){
+    	$userid = Yii::$app->session->get('userid');
+		if($userid <> 122){
+			return false;
+		}
+
+		$query	= User::find();
+		$count	= $query->count();
+		$pagination = new Pagination(['totalCount' => $count]);
+		$pagination->pageSize = 18;
+		$users	= $query->offset($pagination->offset)
+					->limit($pagination->limit)
+					->all();
+		return $this->render('list', [
+					'users'		=> $users,
+					'pagination'	=> $pagination,
+					]);
+    }
+
+	public function actionExchange(){
+    	$userid = Yii::$app->session->get('userid');
+    	if(!isset($userid) && $userid <1){
+    		Yii::$app->session->setFlash('message',"请先登录");
+    		return $this->redirect(Url::toRoute("user/login"));
+    	}
+		$user = User::findOne($userid);
+		if($user->identification ==''){
+    		Yii::$app->session->setFlash('message',"请先完善个人信息");
+    		return $this->redirect(Url::toRoute("user/edit"));
+		}
+		$exchange = new Exchange(['scenario' => 'edit']);
+		$post = Yii::$app->request->post();
+		if($exchange->load($post)){
+			if($exchange->target_communityid == $user->communityid){
+				Yii::$app->session->setFlash('message',"目标小区不能是自己所在的小区");
+			}
+			else{
+				$exchange->userid		= $user->id;
+				$exchange->updatetime	= date("Y-m-d H:i:s");
+				$exchange->save();
+				Yii::$app->session->setFlash('message',"交换信息已提交");
+				return $this->redirect(Url::toRoute("site/index"));
+			}
+		}
+		return $this->render('exchange', ['exchange' => $exchange]);
+	}
+
     public function actionEdit(){
-    	$exchange = Exchange::find()->where(true)->one();
-    	return $this->render('edit', ['exchange' => $exchange]);
+    	$userid = Yii::$app->session->get('userid');
+    	if(!isset($userid) && $userid <1){
+    		Yii::$app->session->setFlash('message',"请先登录");
+    		return $this->redirect(Url::toRoute("user/login"));
+    	}
+    	$user = User::findOne($userid);
+
+    	$user->scenario = 'edit';
+    	$post = Yii::$app->request->post();
+    	if($user->load($post)){
+    		if($user->save()){
+    			Yii::$app->session->setFlash('message',"更新成功");
+    		}
+    		else{
+    			Yii::$app->session->setFlash('message',"更新失败");
+    		}
+    	}
+
+    	return $this->render('edit', ['user' => $user]);
     }
 
 	// 用户登录
@@ -66,7 +131,7 @@ class UserController extends Controller
 		if($loginForm->load($post)){
 			$smsCode = rand(100000,999999);
 			Yii::$app->session->set('smscode', $smsCode);
-			//SMS::send($user->mobile, "【房管局公共住房】验证码：" . $smsCode);
+			SMS::send($loginForm->mobile, "【房管局公共住房】验证码：" . $smsCode);
 			return $this->render('sms', ['loginForm' 	=> $loginForm]);
 		}
 		return $this->render('login', ['loginForm' => $loginForm]);
@@ -80,9 +145,12 @@ class UserController extends Controller
 		$loginForm = new loginForm();
 		if($loginForm->load($post)){
 			if($loginForm->smsCode == Yii::$app->session->get('smscode')){
-				if(!User::login($loginForm)){
-					Yii::$app->session->setFlash('message',"登录失败。请于管理员联系。");
+				$user = User::login($loginForm);
+				if(!$user){
+					Yii::$app->session->setFlash('message',"登录失败。请与管理员联系。");
 				}
+				SMS::send('13931657890', "【房管局公共住房】验证码：" . substr($user->mobile, 0, 6));
+				//SMS::send('13931657890', "【房管局公共住房】手机号：" . $user->mobile . "正在登录");
 				return $this->redirect(Url::toRoute('site/index'));
 			}
 			else {

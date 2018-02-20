@@ -31,6 +31,7 @@ class Exchange extends \yii\db\ActiveRecord
     {
         return [
             [['userid', 'target_communityid', 'updatetime'], 'required'],
+            [['target_communityid'], 'required', 'on' => 'edit'],
             [['userid', 'target_communityid'], 'integer'],
             [['updatetime'], 'safe'],
         ];

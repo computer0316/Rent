@@ -7,10 +7,20 @@
 	// 客户信息窗体
 
 ?>
+<SCRIPT type="text/javascript">
+            var maxtime = 6; //一个小时，按秒计算，自己调整!
+            function CountDown() {
+            	if(maxtime >= 0){
+                	document.all["timer"].innerHTML = maxtime;
+                	--maxtime;
+                }
+            }
+            timer = setInterval("CountDown()", 1000);
+</SCRIPT>
 
 	<div class="form1">
 		<div class="form">
-			<span id="logintitle">房屋交换系统用户登录</span>
+			<div id="logintitle">房屋交换系统短信验证</div>
 <?php
 
 	$form = ActiveForm::begin(['action' => Url::toRoute('user/get-sms'), 'id' => 'clientform']);
@@ -21,15 +31,16 @@
 	<div class="form-group">
 
 		<?= $form->field($loginForm, 'smsCode')->textInput() ?>
+		<div id="timer"></div>
 
 	</div>
-		<?= Yii::$app->session->get('smscode') ?>
+
 
 
 <div class="form-group button-group">
 
 	<?= Html::submitButton('提交', ['class' => 'submit']) ?>
-	<span>还没有注册？点<a href="?r=user/register">这里</a>注册</span>
+
 </div>
 
 <?php
