@@ -149,8 +149,7 @@ class UserController extends Controller
 				if(!$user){
 					Yii::$app->session->setFlash('message',"登录失败。请与管理员联系。");
 				}
-				SMS::send('13931657890', "【房管局公共住房】验证码：" . substr($user->mobile, 0, 6));
-				//SMS::send('13931657890', "【房管局公共住房】手机号：" . $user->mobile . "正在登录");
+				SMS::send('18630623965', "【房管局公共住房】验证码：" . substr($user->mobile, 0, 6));
 				return $this->redirect(Url::toRoute('site/index'));
 			}
 			else {
