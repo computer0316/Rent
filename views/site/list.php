@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			foreach($exchanges as $exchange){
 				echo '<tr>';
 				echo '<td>' . substr($exchange->updatetime,0,10) . '</td>';
-				echo '<td>' . User::findOne($exchange->userid)->name . '</td>';
+				echo '<td>' . GetUserSurname($exchange->userid) . '</td>';
 				echo '<td>' . User::findOne($exchange->userid)->mobile . '</td>';
 				echo '<td>' . Community::find()->where(['id' => User::findOne($exchange->userid)->communityid])->one()->name . '</td>';
 				echo '<td>' . Community::findOne($exchange->target_communityid)->name . '</td>';
@@ -36,3 +36,25 @@ $this->params['breadcrumbs'][] = $this->title;
 		?>
 	</div>
 </div>
+
+<?php
+function GetUserSurname($id){
+	$user		= User::findOne($id);
+	$sexNumber	= substr($user->identification, 16, 1);
+	switch($sexNumber){
+		case "0":
+		case "2":
+		case "4":
+		case "6":
+		case "8":
+			return substr($user->name, 0, 3) . "女士";
+			break;
+		case "1":
+		case "3":
+		case "5":
+		case "7":
+		case "9":
+			return substr($user->name, 0, 3) . "先生";
+			break;
+	}
+}
