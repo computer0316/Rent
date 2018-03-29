@@ -19,10 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
 		}
 		else{
 			echo '<table class="sp-grid-import">';
-			echo '<tr><td>最后访问</td><td>姓名</td><td>电话</td><td>身份证</td><td>所属小区</td></tr>';
+			echo '<tr><td>最后访问</td><td>访问次数</td><td>姓名</td><td>电话</td><td>身份证</td><td>所属小区</td></tr>';
 			foreach($users as $user){
 				echo '<tr>';
 				echo '<td>' . substr($user->updatetime,0,10) . '</td>';
+				echo '<td>' . floor($user->area) . '</td>';
 				echo '<td>' . (empty($user->name) ? 'n/a' : $user->name) . '</td>';
 				echo '<td>' . $user->mobile . '</td>';
 				echo '<td>' . (empty($user->identification) ? 'n/a' : $user->identification) . '</td>';

@@ -60,7 +60,7 @@ class UserController extends Controller
 			return false;
 		}
 
-		$query	= User::find();
+		$query	= User::find()->orderBy("id desc");
 		$count	= $query->count();
 		$pagination = new Pagination(['totalCount' => $count]);
 		$pagination->pageSize = 18;

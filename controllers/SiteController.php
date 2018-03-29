@@ -53,7 +53,7 @@ class SiteController extends Controller
 //    	}
 
 
-		$query	= Exchange::find();
+		$query	= Exchange::find()->orderBy('id desc');
 		$count	= $query->count();
 		$pagination = new Pagination(['totalCount' => $count]);
 		$pagination->pageSize = 18;
